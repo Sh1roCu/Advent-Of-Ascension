@@ -55,6 +55,9 @@ public abstract class BaseSniper extends BaseGun {
 		if (!shooter.onGround || !shooter.isShiftKeyDown())
 			bullet.shootFromRotation(shooter, shooter.xRot, shooter.yRot, 0.0f, 20.0f, 50.0f);
 
+		CompoundNBT nbt = bullet.getPersistentData();
+		int shellLevel = EnchantmentHelper.getItemEnchantmentLevel(AoAEnchantments.SHELL.get(), stack);
+		nbt.putInt("shellLevel", shellLevel);
 		shooter.level.addFreshEntity(bullet);
 
 		if (!shooter.level.isClientSide())

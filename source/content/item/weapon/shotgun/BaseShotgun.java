@@ -65,11 +65,15 @@ public class BaseShotgun extends BaseGun {
 		int pellets = getPelletCount();
 		float spreadFactor = 0.1f * pellets * (1 - 0.15f * EnchantmentHelper.getItemEnchantmentLevel(AoAEnchantments.FORM.get(), stack));
 
+		CompoundNBT nbt;
+		int shellLevel = EnchantmentHelper.getItemEnchantmentLevel(AoAEnchantments.SHELL.get(), stack);
 		for (int i = 0; i < pellets; i++) {
-			BaseBullet pellet = new LimoniteBulletEntity(shooter, this, hand, 4, 1.0f, 0, (random.nextFloat() - 0.5f) * spreadFactor, (random.nextFloat() - 0.5f) * spreadFactor, (random.nextFloat() - 0.5f) * spreadFactor);
-
+			BaseBullet pellet = new LimoniteBulletEntity(shooter, this, hand, 4, 1.0F, 0, (random.nextFloat() - 0.5F) * spreadFactor, (random.nextFloat() - 0.5F) * spreadFactor, (random.nextFloat() - 0.5F) * spreadFactor);
+			nbt = pellet.getPersistentData();
+			nbt.putInt("shellLevel", shellLevel);
 			shooter.level.addFreshEntity(pellet);
 		}
+
 
 		if (!shooter.level.isClientSide())
 			doFiringEffects(shooter, bullet, stack, hand);

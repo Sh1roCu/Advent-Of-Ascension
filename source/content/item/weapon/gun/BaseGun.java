@@ -195,6 +195,9 @@ public abstract class BaseGun extends Item {
 		if (bullet == null)
 			return false;
 
+		CompoundNBT nbt = bullet.getPersistentData();
+		int shellLevel = EnchantmentHelper.getItemEnchantmentLevel(AoAEnchantments.SHELL.get(), stack);
+		nbt.putInt("shellLevel", shellLevel);
 		shooter.level.addFreshEntity(bullet);
 
 		if (!shooter.level.isClientSide())
@@ -228,9 +231,8 @@ public abstract class BaseGun extends Item {
 		if (target != null) {
 			float shellMod = 1;
 
-			if (bullet.getHand() != null)
-				shellMod += 0.1 * EnchantmentHelper.getItemEnchantmentLevel(AoAEnchantments.SHELL.get(), shooter.getItemInHand(bullet.getHand()));
-
+			if (bullet.getHand() != null){
+				shellMod += 0.1f * bullet.getPersistentData().getInt("shellLevel");
 			if (DamageUtil.dealGunDamage(target, shooter, bullet, (float)getDamage() * bulletDmgMultiplier * shellMod)) {
 				doImpactEffect(target, shooter, bullet, bulletDmgMultiplier);
 			}
